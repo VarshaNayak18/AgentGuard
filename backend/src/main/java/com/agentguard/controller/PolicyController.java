@@ -5,6 +5,7 @@ import com.agentguard.model.Policy;
 import com.agentguard.service.PolicyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Policy> createPolicy(
             @RequestBody PolicyRequest request) {
@@ -27,6 +29,7 @@ public class PolicyController {
         return ResponseEntity.ok(policy);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Policy>> getAllPolicies() {
 

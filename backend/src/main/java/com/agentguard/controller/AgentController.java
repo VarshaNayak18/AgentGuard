@@ -5,6 +5,7 @@ import com.agentguard.model.Agent;
 import com.agentguard.service.AgentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/agents")
@@ -16,6 +17,7 @@ public class AgentController {
         this.agentService = agentService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Agent> registerAgent(
             @RequestBody AgentRegistrationRequest request) {
