@@ -1,6 +1,7 @@
 package com.agentguard.model;
 
 import jakarta.persistence.*;
+// import com.agentguard.model.PolicyDecision;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,10 @@ public class ToolCall {
     @Column(columnDefinition = "TEXT")
     private String parameters;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PolicyDecision decision;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -34,12 +39,14 @@ public class ToolCall {
                     ToolType tool,
                     ToolAction action,
                     String parameters,
+                    PolicyDecision decision,
                     LocalDateTime createdAt) {
         this.agent = agent;
         this.tool = tool;
         this.action = action;
         this.parameters = parameters;
         this.createdAt = createdAt;
+        this.decision = decision;
     }
 
     public Long getId() {
@@ -90,6 +97,12 @@ public class ToolCall {
         this.createdAt = createdAt;
     }
 
-    // getters and setters
+    public PolicyDecision getDecision() {
+        return decision;
+    }
+
+    public void setDecision(PolicyDecision decision) {
+        this.decision = decision;
+    }
     
 }

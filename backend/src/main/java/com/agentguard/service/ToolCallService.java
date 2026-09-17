@@ -2,6 +2,7 @@ package com.agentguard.service;
 
 import com.agentguard.dto.ToolCallRequest;
 import com.agentguard.model.Agent;
+import com.agentguard.model.PolicyDecision;
 import com.agentguard.model.ToolCall;
 import com.agentguard.repository.AgentRepository;
 import com.agentguard.repository.ToolCallRepository;
@@ -14,27 +15,35 @@ public class ToolCallService {
 
     private final ToolCallRepository toolCallRepository;
     private final AgentRepository agentRepository;
-
+    private final PolicyEngine policyEngine;
+    
     public ToolCallService(ToolCallRepository toolCallRepository,
-                           AgentRepository agentRepository) {
+                       AgentRepository agentRepository,
+                       PolicyEngine policyEngine) {
         this.toolCallRepository = toolCallRepository;
         this.agentRepository = agentRepository;
+        this.policyEngine = policyEngine;
     }
 
     public ToolCall createToolCall(ToolCallRequest request) {
-
+        
         Agent agent = agentRepository.findById(request.getAgentId())
-                .orElseThrow(() ->
-                        new RuntimeException("Agent not found"));
-
+            .orElseThrow(() ->
+                    new RuntimeException("Agent not found"));
+                    
+        
         ToolCall toolCall = new ToolCall();
-
+        
         toolCall.setAgent(agent);
         toolCall.setTool(request.getTool());
         toolCall.setAction(request.getAction());
         toolCall.setParameters(request.getParameters());
         toolCall.setCreatedAt(LocalDateTime.now());
-
+        
+        PolicyDecision decision = policyEngine.evaluate(toolCall);
+        
+        toolCall.setDecision(decision);
+        
         return toolCallRepository.save(toolCall);
     }
 }
