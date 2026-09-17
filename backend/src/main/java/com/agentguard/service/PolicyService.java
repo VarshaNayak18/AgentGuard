@@ -25,6 +25,7 @@ public class PolicyService {
         policy.setTool(request.getTool());
         policy.setAction(request.getAction());
         policy.setDecision(request.getDecision());
+        policy.setPriority(request.getPriority());
         policy.setEnabled(true);
 
         return policyRepository.save(policy);

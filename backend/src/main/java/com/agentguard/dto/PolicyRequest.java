@@ -11,6 +11,7 @@ public class PolicyRequest {
     private ToolType tool;
     private ToolAction action;
     private PolicyDecision decision;
+    private Integer priority;
 
     public PolicyRequest() {
     }
@@ -53,5 +54,13 @@ public class PolicyRequest {
 
     public void setDecision(PolicyDecision decision) {
         this.decision = decision;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+    
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

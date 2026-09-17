@@ -27,6 +27,8 @@ public class Policy {
     @Column(nullable = false)
     private PolicyDecision decision;
 
+    private Integer priority;
+
     @Column(nullable = false)
     private boolean enabled = true;
 
@@ -38,12 +40,14 @@ public class Policy {
                   ToolType tool,
                   ToolAction action,
                   PolicyDecision decision,
+                  Integer priority,
                   boolean enabled) {
         this.name = name;
         this.description = description;
         this.tool = tool;
         this.action = action;
         this.decision = decision;
+        this.priority = priority;
         this.enabled = enabled;
     }
 
@@ -95,14 +99,19 @@ public class Policy {
         this.decision = decision;
     }
 
+    public Integer getPriority() {
+        return priority;
+    }
+    
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    // Generate getters and setters
-    
+    }    
 }
