@@ -1,11 +1,24 @@
 package com.agentguard.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "agents")
 public class Agent {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private AgentType type;
+    
+    @Enumerated(EnumType.STRING)
     private Environment environment;
+    
+    @Enumerated(EnumType.STRING)
     private AgentStatus status;
 
     public Agent() {

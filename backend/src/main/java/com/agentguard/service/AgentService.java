@@ -3,10 +3,17 @@ package com.agentguard.service;
 import com.agentguard.dto.AgentRegistrationRequest;
 import com.agentguard.model.Agent;
 import com.agentguard.model.AgentStatus;
+import com.agentguard.repository.AgentRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AgentService {
+
+    private final AgentRepository agentRepository;
+
+    public AgentService(AgentRepository agentRepository) {
+        this.agentRepository = agentRepository;
+    }
 
     public Agent registerAgent(AgentRegistrationRequest request) {
 
@@ -17,6 +24,6 @@ public class AgentService {
         agent.setEnvironment(request.getEnvironment());
         agent.setStatus(AgentStatus.ACTIVE);
 
-        return agent;
+        return agentRepository.save(agent);
     }
 }
