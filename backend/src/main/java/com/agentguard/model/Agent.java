@@ -4,14 +4,14 @@ public class Agent {
 
     private Long id;
     private String name;
-    private String type;
-    private String environment;
-    private String status;
+    private AgentType type;
+    private Environment environment;
+    private AgentStatus status;
 
     public Agent() {
     }
 
-    public Agent(Long id, String name, String type, String environment, String status) {
+    public Agent(Long id, String name, AgentType type, Environment environment, AgentStatus status) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -35,27 +35,27 @@ public class Agent {
         this.name = name;
     }
 
-    public String getType() {
+    public AgentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(AgentType type) {
         this.type = type;
     }
 
-    public String getEnvironment() {
+    public Environment getEnvironment() {
         return environment;
     }
 
-    public void setEnvironment(String environment) {
+    public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
 
-    public String getStatus() {
+    public AgentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgentStatus status) {
         this.status = status;
     }
 }
