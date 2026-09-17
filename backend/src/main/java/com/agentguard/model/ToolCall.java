@@ -30,6 +30,10 @@ public class ToolCall {
     @Column(nullable = false)
     private PolicyDecision decision;
 
+    @ManyToOne
+    @JoinColumn(name = "policy_id")
+    private Policy policy;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -104,5 +108,12 @@ public class ToolCall {
     public void setDecision(PolicyDecision decision) {
         this.decision = decision;
     }
+
+    public Policy getPolicy() {
+        return policy;
+    }
     
+    public void setPolicy(Policy policy) {
+        this.policy = policy;
+    }
 }

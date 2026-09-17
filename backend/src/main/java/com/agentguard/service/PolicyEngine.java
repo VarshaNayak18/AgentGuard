@@ -17,19 +17,26 @@ public class PolicyEngine {
         this.policyRepository = policyRepository;
     }
 
-    public PolicyDecision evaluate(ToolCall toolCall) {
+    public PolicyEvaluationResult evaluate(ToolCall toolCall) {
 
-        List<Policy> policies = policyRepository.findByEnabledTrue();
+    List<Policy> policies =
+            policyRepository.findByEnabledTrueOrderByPriorityDesc();
 
-        for (Policy policy : policies) {
+    for (Policy policy : policies) {
 
-            if (policy.getTool() == toolCall.getTool()
-                    && policy.getAction() == toolCall.getAction()) {
+        if (policy.getTool() == toolCall.getTool()
+                && policy.getAction() == toolCall.getAction()) {
 
-                return policy.getDecision();
-            }
+            return new PolicyEvaluationResult(
+                    policy.getDecision(),
+                    policy
+            );
         }
-
-        return PolicyDecision.ALLOW;
     }
+
+    return new PolicyEvaluationResult(
+            PolicyDecision.ALLOW,
+            null
+    );
+}
 }

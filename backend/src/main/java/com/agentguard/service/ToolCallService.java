@@ -2,11 +2,11 @@ package com.agentguard.service;
 
 import com.agentguard.dto.ToolCallRequest;
 import com.agentguard.model.Agent;
-import com.agentguard.model.PolicyDecision;
 import com.agentguard.model.ToolCall;
 import com.agentguard.repository.AgentRepository;
 import com.agentguard.repository.ToolCallRepository;
 import org.springframework.stereotype.Service;
+// import com.agentguard.service.PolicyEvaluationResult;
 
 import java.time.LocalDateTime;
 
@@ -40,9 +40,10 @@ public class ToolCallService {
         toolCall.setParameters(request.getParameters());
         toolCall.setCreatedAt(LocalDateTime.now());
         
-        PolicyDecision decision = policyEngine.evaluate(toolCall);
+        PolicyEvaluationResult result = policyEngine.evaluate(toolCall);
         
-        toolCall.setDecision(decision);
+        toolCall.setDecision(result.getDecision());
+        toolCall.setPolicy(result.getPolicy());
         
         return toolCallRepository.save(toolCall);
     }

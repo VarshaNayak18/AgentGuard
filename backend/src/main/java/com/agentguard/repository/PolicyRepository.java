@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PolicyRepository extends JpaRepository<Policy, Long> {
 
-    List<Policy> findByEnabledTrue();
+    List<Policy> findByEnabledTrueOrderByPriorityDesc();
 }
