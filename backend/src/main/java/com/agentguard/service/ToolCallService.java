@@ -79,6 +79,7 @@ public class ToolCallService {
         toolCall.setPromptTokens(aiAnalysis.getPrompt_tokens());
         toolCall.setCompletionTokens(aiAnalysis.getCompletion_tokens());
         toolCall.setTotalTokens(aiAnalysis.getTotal_tokens());
+        toolCall.setLatencyMs(aiAnalysis.getLatency_ms());
         
         return toolCallRepository.save(toolCall);
     }

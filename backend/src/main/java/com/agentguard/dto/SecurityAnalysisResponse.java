@@ -9,6 +9,7 @@ public class SecurityAnalysisResponse {
     private Integer prompt_tokens;
     private Integer completion_tokens;
     private Integer total_tokens;
+    private Double latency_ms;
 
     public String getRisk_level() {
         return risk_level;
@@ -32,5 +33,9 @@ public class SecurityAnalysisResponse {
 
     public Integer getTotal_tokens() {
         return total_tokens;
+    }
+
+    public Double getLatency_ms() {
+        return latency_ms;
     }
 }

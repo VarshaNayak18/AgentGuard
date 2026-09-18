@@ -29,6 +29,7 @@ class SecurityAnalysisResponse(BaseModel):
     prompt_tokens: int
     completion_tokens: int
     total_tokens: int
+    latency_ms: float
 
 
 @app.get("/health")
@@ -121,7 +122,8 @@ Return your assessment using the required structured format.
     **result,
     prompt_tokens=response.usage.prompt_tokens,
     completion_tokens=response.usage.completion_tokens,
-    total_tokens=response.usage.total_tokens
+    total_tokens=response.usage.total_tokens,
+    latency_ms=response.usage.total_time * 1000
 )
 
 

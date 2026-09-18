@@ -51,6 +51,8 @@ public class ToolCall {
     
     private Integer totalTokens;
 
+    private Double latencyMs;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -188,5 +190,13 @@ public class ToolCall {
 
     public void setTotalTokens(Integer totalTokens) {
         this.totalTokens = totalTokens;
+    }
+
+    public Double getLatencyMs() {
+        return latencyMs;
+    }
+    
+    public void setLatencyMs(Double latencyMs) {
+        this.latencyMs = latencyMs;
     }
 }
