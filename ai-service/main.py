@@ -1,9 +1,18 @@
+import os
+import json
+
 from fastapi import FastAPI
 from pydantic import BaseModel
+from groq import Groq
+
 
 app = FastAPI(
     title="AgentGuard AI Security Analyzer",
     version="1.0.0"
+)
+
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY")
 )
 
 
@@ -16,116 +25,89 @@ class ToolCallRequest(BaseModel):
 class SecurityAnalysisResponse(BaseModel):
     risk_level: str
     reason: str
+    confidence: float
 
 
 @app.get("/health")
 def health():
-    return {
-        "status": "AI Security Analyzer is running"
-    }
+    return {"status": "AI Security Analyzer is running"}
 
 
 @app.post("/analyze", response_model=SecurityAnalysisResponse)
 def analyze_tool_call(request: ToolCallRequest):
 
-    tool = request.tool.upper()
-    action = request.action.upper()
-    parameters = request.parameters.lower()
+    prompt = f"""
+Analyze the following AI agent tool call from a cybersecurity perspective.
 
-    # Critical shell patterns
-    if tool == "SHELL" and action == "EXECUTE":
+Tool: {request.tool}
+Action: {request.action}
+Parameters: {request.parameters}
 
-        dangerous_patterns = [
-            "curl",
-            "wget",
-            "powershell",
-            "rm -rf",
-            "chmod +x",
-            "| bash",
-            "| sh"
-        ]
+Assess the potential security risk of this action.
 
-        for pattern in dangerous_patterns:
-            if pattern in parameters:
-                return SecurityAnalysisResponse(
-                    risk_level="CRITICAL",
-                    reason=(
-                        f"Shell command contains potentially dangerous "
-                        f"pattern: {pattern}"
-                    )
+Risk levels:
+- LOW: Routine operation with minimal security concern.
+- MEDIUM: Operation requires some security review.
+- HIGH: Potentially dangerous or sensitive operation.
+- CRITICAL: Highly dangerous operation that could cause serious security impact.
+
+Return your assessment using the required structured format.
+"""
+
+    response = client.chat.completions.create(
+        model="openai/gpt-oss-20b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are AgentGuard, an AI agent security analyst. "
+                    "Analyze tool calls for security risks. "
+                    "Be conservative when evaluating potentially destructive, "
+                    "credential-related, network, filesystem, or execution operations."
                 )
-
-        return SecurityAnalysisResponse(
-            risk_level="MEDIUM",
-            reason="Shell command requires contextual security review."
-        )
-
-    # File deletion
-    if tool == "FILESYSTEM" and action == "DELETE":
-        return SecurityAnalysisResponse(
-            risk_level="HIGH",
-            reason="File deletion is a destructive filesystem operation."
-        )
-
-    # File writing
-    if tool == "FILESYSTEM" and action == "WRITE":
-
-        sensitive_paths = [
-            ".env",
-            "application.properties",
-            "id_rsa",
-            "credentials"
-        ]
-
-        for path in sensitive_paths:
-            if path in parameters:
-                return SecurityAnalysisResponse(
-                    risk_level="HIGH",
-                    reason=(
-                        f"Write operation targets potentially sensitive "
-                        f"resource: {path}"
-                    )
-                )
-
-        return SecurityAnalysisResponse(
-            risk_level="MEDIUM",
-            reason="File write operation can modify local resources."
-        )
-
-    # Git push
-    if tool == "GIT" and action == "PUSH":
-        return SecurityAnalysisResponse(
-            risk_level="HIGH",
-            reason="Git push can publish changes to a remote repository."
-        )
-
-    # Database operations
-    if tool == "DATABASE" and action == "QUERY":
-
-        sensitive_keywords = [
-            "password",
-            "secret",
-            "token",
-            "api_key"
-        ]
-
-        for keyword in sensitive_keywords:
-            if keyword in parameters:
-                return SecurityAnalysisResponse(
-                    risk_level="HIGH",
-                    reason=(
-                        f"Database query references potentially sensitive "
-                        f"data: {keyword}"
-                    )
-                )
-
-        return SecurityAnalysisResponse(
-            risk_level="MEDIUM",
-            reason="Database query requires data-access review."
-        )
-
-    # Default
-    return SecurityAnalysisResponse(
-        risk_level="LOW",
-        reason="No high-risk contextual pattern detected."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "security_analysis",
+                "strict": True,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "risk_level": {
+                            "type": "string",
+                            "enum": [
+                                "LOW",
+                                "MEDIUM",
+                                "HIGH",
+                                "CRITICAL"
+                            ]
+                        },
+                        "reason": {
+                            "type": "string"
+                        },
+                        "confidence": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "risk_level",
+                        "reason",
+                        "confidence"
+                    ],
+                    "additionalProperties": False
+                }
+            }
+        }
     )
+
+    result = json.loads(
+        response.choices[0].message.content
+    )
+
+    return SecurityAnalysisResponse(**result)

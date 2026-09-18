@@ -38,6 +38,13 @@ public class ToolCall {
     @Column(nullable = false)
     private RiskLevel riskLevel;
 
+    private String aiRiskLevel;
+    
+    @Column(columnDefinition = "TEXT")
+    private String aiRiskReason;
+    
+    private Double aiConfidence;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -128,4 +135,30 @@ public class ToolCall {
     public void setRiskLevel(RiskLevel riskLevel) {
         this.riskLevel = riskLevel;
     }
+
+    public String getAiRiskLevel() {
+        return aiRiskLevel;
+    }
+
+    public void setAiRiskLevel(String aiRiskLevel) {
+        this.aiRiskLevel = aiRiskLevel;
+    }
+
+    public String getAiRiskReason() {
+        return aiRiskReason;
+    }
+
+    public void setAiRiskReason(String aiRiskReason) {
+        this.aiRiskReason = aiRiskReason;
+    }
+
+    public Double getAiConfidence() {
+        return aiConfidence;
+    }
+
+    public void setAiConfidence(Double aiConfidence) {
+        this.aiConfidence = aiConfidence;
+    }
+
+    
 }

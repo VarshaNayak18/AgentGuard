@@ -72,6 +72,10 @@ public class ToolCallService {
                 toolCall.getAction().name(),
                 toolCall.getParameters()
         );
+
+        toolCall.setAiRiskLevel(aiAnalysis.getRisk_level());
+        toolCall.setAiRiskReason(aiAnalysis.getReason());
+        toolCall.setAiConfidence(aiAnalysis.getConfidence());
         
         return toolCallRepository.save(toolCall);
     }

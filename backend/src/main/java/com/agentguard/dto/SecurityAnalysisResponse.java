@@ -4,6 +4,7 @@ public class SecurityAnalysisResponse {
 
     private String risk_level;
     private String reason;
+    private Double confidence;
 
     public String getRisk_level() {
         return risk_level;
@@ -11,5 +12,9 @@ public class SecurityAnalysisResponse {
 
     public String getReason() {
         return reason;
+    }
+
+    public Double getConfidence() {
+        return confidence;
     }
 }
