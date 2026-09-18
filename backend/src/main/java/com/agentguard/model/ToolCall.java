@@ -45,6 +45,12 @@ public class ToolCall {
     
     private Double aiConfidence;
 
+    private Integer promptTokens;
+    
+    private Integer completionTokens;
+    
+    private Integer totalTokens;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -160,5 +166,27 @@ public class ToolCall {
         this.aiConfidence = aiConfidence;
     }
 
-    
+    public Integer getPromptTokens() {
+        return promptTokens;
+    }
+
+    public void setPromptTokens(Integer promptTokens) {
+        this.promptTokens = promptTokens;
+    }
+
+    public Integer getCompletionTokens() {
+        return completionTokens;
+    }
+
+    public void setCompletionTokens(Integer completionTokens) {
+        this.completionTokens = completionTokens;
+    }
+
+    public Integer getTotalTokens() {
+        return totalTokens;
+    }
+
+    public void setTotalTokens(Integer totalTokens) {
+        this.totalTokens = totalTokens;
+    }
 }

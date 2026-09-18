@@ -76,6 +76,9 @@ public class ToolCallService {
         toolCall.setAiRiskLevel(aiAnalysis.getRisk_level());
         toolCall.setAiRiskReason(aiAnalysis.getReason());
         toolCall.setAiConfidence(aiAnalysis.getConfidence());
+        toolCall.setPromptTokens(aiAnalysis.getPrompt_tokens());
+        toolCall.setCompletionTokens(aiAnalysis.getCompletion_tokens());
+        toolCall.setTotalTokens(aiAnalysis.getTotal_tokens());
         
         return toolCallRepository.save(toolCall);
     }

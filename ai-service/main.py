@@ -26,6 +26,9 @@ class SecurityAnalysisResponse(BaseModel):
     risk_level: str
     reason: str
     confidence: float
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
 
 
 @app.get("/health")
@@ -106,8 +109,23 @@ Return your assessment using the required structured format.
         }
     )
 
-    result = json.loads(
-        response.choices[0].message.content
-    )
+    print("LLM Usage:")
+    print("Prompt tokens:", response.usage.prompt_tokens)
+    print("Completion tokens:", response.usage.completion_tokens)
+    print("Total tokens:", response.usage.total_tokens)
 
-    return SecurityAnalysisResponse(**result)
+    result = json.loads(
+            response.choices[0].message.content
+        )
+    return SecurityAnalysisResponse(
+    **result,
+    prompt_tokens=response.usage.prompt_tokens,
+    completion_tokens=response.usage.completion_tokens,
+    total_tokens=response.usage.total_tokens
+)
+
+
+
+    
+
+    
