@@ -13,6 +13,7 @@ import java.util.EnumMap;
 import java.util.Map;
 // import com.agentguard.service.PolicyEvaluationResult;
 import java.util.List;
+import com.agentguard.dto.SecurityAnalysisResponse;
 
 import java.time.LocalDateTime;
 
@@ -23,15 +24,18 @@ public class ToolCallService {
     private final AgentRepository agentRepository;
     private final PolicyEngine policyEngine;
     private final RiskEngine riskEngine;
+    private final SecurityAnalyzerClient securityAnalyzerClient;
     
     public ToolCallService(ToolCallRepository toolCallRepository,
                        AgentRepository agentRepository,
                        PolicyEngine policyEngine,
-                       RiskEngine riskEngine) {
+                       RiskEngine riskEngine,
+                       SecurityAnalyzerClient securityAnalyzerClient) {
         this.toolCallRepository = toolCallRepository;
         this.agentRepository = agentRepository;
         this.policyEngine = policyEngine;
         this.riskEngine = riskEngine;
+        this.securityAnalyzerClient = securityAnalyzerClient;
     }
 
     public ToolCall createToolCall(ToolCallRequest request) {
@@ -61,6 +65,13 @@ public class ToolCallService {
         );
         
         toolCall.setRiskLevel(riskLevel);
+
+        SecurityAnalysisResponse aiAnalysis =
+        securityAnalyzerClient.analyze(
+                toolCall.getTool().name(),
+                toolCall.getAction().name(),
+                toolCall.getParameters()
+        );
         
         return toolCallRepository.save(toolCall);
     }
