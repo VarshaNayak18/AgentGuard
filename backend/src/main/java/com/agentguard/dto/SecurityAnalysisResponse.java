@@ -38,4 +38,32 @@ public class SecurityAnalysisResponse {
     public Double getLatency_ms() {
         return latency_ms;
     }
+
+    public void setRisk_level(String risk_level) {
+    this.risk_level = risk_level;
+}
+
+public void setReason(String reason) {
+    this.reason = reason;
+}
+
+public void setConfidence(Double confidence) {
+    this.confidence = confidence;
+}
+
+public void setPrompt_tokens(Integer prompt_tokens) {
+    this.prompt_tokens = prompt_tokens;
+}
+
+public void setCompletion_tokens(Integer completion_tokens) {
+    this.completion_tokens = completion_tokens;
+}
+
+public void setTotal_tokens(Integer total_tokens) {
+    this.total_tokens = total_tokens;
+}
+
+public void setLatency_ms(Double latency_ms) {
+    this.latency_ms = latency_ms;
+}
 }
