@@ -3,6 +3,7 @@ package com.agentguard.service;
 import com.agentguard.dto.ToolCallRequest;
 import com.agentguard.model.Agent;
 import com.agentguard.model.PolicyDecision;
+import com.agentguard.model.RiskLevel;
 import com.agentguard.model.ToolCall;
 import com.agentguard.model.ToolType;
 import com.agentguard.repository.AgentRepository;
@@ -19,13 +20,16 @@ public class ToolCallService {
     private final ToolCallRepository toolCallRepository;
     private final AgentRepository agentRepository;
     private final PolicyEngine policyEngine;
+    private final RiskEngine riskEngine;
     
     public ToolCallService(ToolCallRepository toolCallRepository,
                        AgentRepository agentRepository,
-                       PolicyEngine policyEngine) {
+                       PolicyEngine policyEngine,
+                       RiskEngine riskEngine) {
         this.toolCallRepository = toolCallRepository;
         this.agentRepository = agentRepository;
         this.policyEngine = policyEngine;
+        this.riskEngine = riskEngine;
     }
 
     public ToolCall createToolCall(ToolCallRequest request) {
@@ -47,6 +51,14 @@ public class ToolCallService {
         
         toolCall.setDecision(result.getDecision());
         toolCall.setPolicy(result.getPolicy());
+
+        RiskLevel riskLevel =
+        riskEngine.assessRisk(
+                toolCall.getTool(),
+                toolCall.getAction()
+        );
+        
+        toolCall.setRiskLevel(riskLevel);
         
         return toolCallRepository.save(toolCall);
     }

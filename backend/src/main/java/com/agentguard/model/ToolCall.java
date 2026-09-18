@@ -34,6 +34,10 @@ public class ToolCall {
     @JoinColumn(name = "policy_id")
     private Policy policy;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RiskLevel riskLevel;
+
     private LocalDateTime createdAt;
 
     public ToolCall() {
@@ -115,5 +119,13 @@ public class ToolCall {
     
     public void setPolicy(Policy policy) {
         this.policy = policy;
+    }
+
+    public RiskLevel getRiskLevel() {
+        return riskLevel;
+    }
+    
+    public void setRiskLevel(RiskLevel riskLevel) {
+        this.riskLevel = riskLevel;
     }
 }
