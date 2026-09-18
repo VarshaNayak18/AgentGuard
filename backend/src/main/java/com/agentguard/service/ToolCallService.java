@@ -9,6 +9,8 @@ import com.agentguard.model.ToolType;
 import com.agentguard.repository.AgentRepository;
 import com.agentguard.repository.ToolCallRepository;
 import org.springframework.stereotype.Service;
+import java.util.EnumMap;
+import java.util.Map;
 // import com.agentguard.service.PolicyEvaluationResult;
 import java.util.List;
 
@@ -78,4 +80,22 @@ public class ToolCallService {
     public List<ToolCall> getToolCallsByAgent(Long agentId) {
         return toolCallRepository.findByAgentId(agentId);
     }
+
+    public List<ToolCall> getToolCallsByRiskLevel(RiskLevel riskLevel) {
+        return toolCallRepository.findByRiskLevel(riskLevel);
+    }
+
+    public Map<RiskLevel, Long> getRiskStatistics() {
+
+    Map<RiskLevel, Long> statistics = new EnumMap<>(RiskLevel.class);
+
+    for (RiskLevel level : RiskLevel.values()) {
+        statistics.put(
+                level,
+                (long) toolCallRepository.findByRiskLevel(level).size()
+        );
+    }
+
+    return statistics;
+}
 }

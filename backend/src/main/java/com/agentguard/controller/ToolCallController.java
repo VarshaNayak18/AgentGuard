@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.agentguard.model.PolicyDecision;
+import com.agentguard.model.RiskLevel;
 import com.agentguard.model.ToolType;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tool-calls")
@@ -59,4 +61,21 @@ public class ToolCallController {
                 toolCallService.getToolCallsByAgent(agentId)
         );
     }
+
+    @GetMapping("/risk/{riskLevel}")
+    public ResponseEntity<List<ToolCall>> getByRiskLevel(
+        @PathVariable RiskLevel riskLevel) {
+            
+            return ResponseEntity.ok(
+                toolCallService.getToolCallsByRiskLevel(riskLevel)
+            );
+    }
+
+    @GetMapping("/stats/risk")
+public ResponseEntity<Map<RiskLevel, Long>> getRiskStatistics() {
+
+    return ResponseEntity.ok(
+            toolCallService.getRiskStatistics()
+    );
+}
 }
