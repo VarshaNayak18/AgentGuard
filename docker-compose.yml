@@ -1,0 +1,35 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: agentguard-postgres
+    environment:
+      POSTGRES_DB: agentguard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: agentguard-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    image: agentguard-backend
+    container_name: agentguard-backend
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/agentguard
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
