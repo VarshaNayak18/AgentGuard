@@ -5,6 +5,7 @@ import com.agentguard.model.Agent;
 import com.agentguard.model.AgentStatus;
 import com.agentguard.repository.AgentRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class AgentService {
@@ -25,5 +26,9 @@ public class AgentService {
         agent.setStatus(AgentStatus.ACTIVE);
 
         return agentRepository.save(agent);
+    }
+
+    public List<Agent> getAllAgents() {
+        return agentRepository.findAll();
     }
 }
